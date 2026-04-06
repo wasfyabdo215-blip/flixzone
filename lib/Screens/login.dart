@@ -2,197 +2,160 @@ import 'package:flixzone/Screens/homepage.dart';
 import 'package:flixzone/Screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:flixzone/provider/UserProvide.dart' as custom;
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 150),
-          child: Center(
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/image2.jpeg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Container(color: Colors.black.withOpacity(0.7)),
-                SingleChildScrollView(
-                  child: Center(
-                    child: Container(
-                      width: 400,
-                      padding: EdgeInsets.all(30),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'FLIX',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'ZONE',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Text(
-                            'Welcome to FilxZone Universe.',
-                            style: TextStyle(color: Colors.white70, fontSize: 16),
-                          ),
-
-                          SizedBox(height: 30),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[800],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Email or Username',
-                                hintStyle: TextStyle(color: Colors.white54),
-                                border: InputBorder.none,
-                                prefixIcon: Icon(Icons.person, color: Colors.white54),
-                              ),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-
-                          SizedBox(height: 15),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[800],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Password',
-                                hintStyle: TextStyle(color: Colors.white54),
-                                border: InputBorder.none,
-                                prefixIcon: Icon(Icons.lock, color: Colors.white54),
-                              ),
-                              style: TextStyle(color: Colors.white),
-                              obscureText: true,
-                            ),
-                          ),
-
-                          SizedBox(height: 20),
-
-                          // Button
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Homepage()));
-
-                                /*ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Signing in...')),
-                                );*/
-                              },
-                              child: Text(
-                                'sign in',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(vertical: 15),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(height: 15),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Register()),
-                                  );
-                                },
-                                child: Text(
-
-
-                                  'Create an Account',
-                                  style: TextStyle(color: Colors.white70,fontSize: 15),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 20),
-
-                          Text(
-                            'Or sign in with:',
-                            style: TextStyle(color: Colors.white70,fontSize: 20),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _buildSocialButton(
-                                FontAwesomeIcons.google,
-                                Colors.white,
-                                Colors.red,
-                              ),
-                              SizedBox(width: 15),
-                              _buildSocialButton(
-                                Icons.facebook,
-                                Colors.white,
-                                Colors.blue,
-                              ),
-                              SizedBox(width: 15),
-                              _buildSocialButton(
-                                Icons.apple,
-                                Colors.white,
-                                Colors.black,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/image2.jpeg'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
+          Container(color: Colors.black.withOpacity(0.7)),
+
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('FLIX', style: TextStyle(color: Colors.red, fontSize: 36, fontWeight: FontWeight.bold)),
+                        Text('ZONE', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const Text('Welcome to FlixZone Universe.', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    const SizedBox(height: 30),
+
+                    _buildLoginTextField(
+                      controller: emailController,
+                      hint: 'Email',
+                      icon: Icons.person,
+                    ),
+                    const SizedBox(height: 15),
+
+                    _buildLoginTextField(
+                      controller: passwordController,
+                      hint: 'Password',
+                      icon: Icons.lock,
+                      isPassword: true,
+                    ),
+                    const SizedBox(height: 25),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+
+                          final provider = Provider.of<custom.Userprovide>(context, listen: false);
+
+
+                          if (emailController.text == provider.registeredEmail &&
+                              passwordController.text == provider.registeredPassword &&
+                              emailController.text.isNotEmpty) {
+
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Homepage()),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Invalid Email or Password!'),
+                                backgroundColor: Colors.redAccent,
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: const Text('Sign In', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
+                      },
+                      child: const Text('Create an Account', style: TextStyle(color: Colors.white70, fontSize: 15)),
+                    ),
+
+                    const SizedBox(height: 20),
+                    const Text('Or sign in with:', style: TextStyle(color: Colors.white70, fontSize: 18)),
+                    const SizedBox(height: 15),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildSocialButton(FontAwesomeIcons.google, Colors.white, Colors.red),
+                        const SizedBox(width: 15),
+                        _buildSocialButton(Icons.facebook, Colors.white, Colors.blue),
+                        const SizedBox(width: 15),
+                        _buildSocialButton(Icons.apple, Colors.white, Colors.black),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoginTextField({required TextEditingController controller, required String hint, required IconData icon, bool isPassword = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        color: Colors.grey[900]?.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.white54),
+          border: InputBorder.none,
+          prefixIcon: Icon(icon, color: Colors.white54),
         ),
       ),
     );
@@ -200,13 +163,11 @@ class Login extends StatelessWidget {
 
   Widget _buildSocialButton(IconData icon, Color iconColor, Color bgColor) {
     return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Icon(icon, color: iconColor, size: 20),
+      width: 45,
+      height: 45,
+      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(8)),
+      child: Icon(icon, color: iconColor, size: 22),
     );
   }
 }
+

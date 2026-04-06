@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:provider/provider.dart';
+import 'package:flixzone/provider/UserProvide.dart';
+import '../model/model.dart';
 
 class Homescreen extends StatelessWidget {
   const Homescreen({super.key});
@@ -39,35 +40,32 @@ class Homescreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              const Icon(Icons.play_circle_fill, color: Colors.redAccent, size: 60),
-              const Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: ' Flix', style: TextStyle(color: Colors.redAccent, fontSize: 40, fontWeight: FontWeight.bold)),
-                    TextSpan(text: 'Zone', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
-                  ],
-                ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            const Icon(Icons.play_circle_fill, color: Colors.redAccent, size: 60),
+            const Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: ' Flix', style: TextStyle(color: Colors.redAccent, fontSize: 40, fontWeight: FontWeight.bold)),
+                  TextSpan(text: 'Zone', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+                ],
               ),
-              const SizedBox(height: 25),
-              _buildSearchBar(),
-              const SizedBox(height: 30),
-              _buildMovieSection("Movies", movies),
-              const SizedBox(height: 25),
-              _buildMovieSection("Series", series),
-              const SizedBox(height: 25),
-              _buildMovieSection("Anime", anime),
-              const SizedBox(height: 25),
-              _buildMovieSection("Top Rated", trending),
-              const SizedBox(height: 40),
-            ],
-          ),
+            ),
+            const SizedBox(height: 25),
+            _buildSearchBar(),
+            const SizedBox(height: 30),
+            _buildMovieSection("Movies", movies),
+            const SizedBox(height: 25),
+            _buildMovieSection("Series", series),
+            const SizedBox(height: 25),
+            _buildMovieSection("Anime", anime),
+            const SizedBox(height: 25),
+            _buildMovieSection("Top Rated", trending),
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );
@@ -98,10 +96,7 @@ class Homescreen extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20, bottom: 15),
-          child: Text(
-            title,
-            style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          ),
+          child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
         ),
         SizedBox(
           height: 310,
@@ -110,11 +105,10 @@ class Homescreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             itemCount: dataList.length,
             itemBuilder: (context, index) {
-
               return MovieCard(
                 imagePath: dataList[index]['img'],
                 name: dataList[index]['name'],
-                rate: dataList[index]['rate'],
+                rate: dataList[index]['rate'].toDouble(),
               );
             },
           ),
@@ -124,28 +118,18 @@ class Homescreen extends StatelessWidget {
   }
 }
 
-
-class MovieCard extends StatefulWidget {
+class MovieCard extends StatelessWidget {
   final String imagePath;
   final String name;
   final double rate;
 
-  const MovieCard({
-    super.key,
-    required this.imagePath,
-    required this.name,
-    required this.rate,
-  });
-
-  @override
-  State<MovieCard> createState() => _MovieCardState();
-}
-
-class _MovieCardState extends State<MovieCard> {
-  bool isFavorite = false;
+  const MovieCard({super.key, required this.imagePath, required this.name, required this.rate});
 
   @override
   Widget build(BuildContext context) {
+    final movie = Movie(title: name, imageUrl: imagePath, rating: rate);
+    final isFavorite = context.watch<Userprovide>().isFavorite(movie);
+
     return Container(
       width: 150,
       margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -156,60 +140,28 @@ class _MovieCardState extends State<MovieCard> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
-                  widget.imagePath,
-                  height: 220,
-                  width: 150,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 220,
-                    width: 150,
-                    color: Colors.grey[900],
-                    child: const Icon(Icons.broken_image, color: Colors.redAccent),
-                  ),
-                ),
+                child: Image.asset(imagePath, height: 220, width: 150, fit: BoxFit.cover),
               ),
               Positioned(
-                top: 10,
-                right: 10,
+                top: 10, right: 10,
                 child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isFavorite = !isFavorite;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.white,
-                      size: 20,
-                    ),
+                  onTap: () => context.read<Userprovide>().toggleFavorite(movie),
+                  child: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Colors.red : Colors.white,
+                    size: 25,
                   ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 10),
-          Text(
-            widget.name,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold), maxLines: 1),
           Row(
             children: [
               const Icon(Icons.star, color: Colors.amber, size: 16),
               const SizedBox(width: 5),
-              Text(
-                widget.rate.toString(),
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
-              ),
+              Text(rate.toString(), style: const TextStyle(color: Colors.grey, fontSize: 14)),
             ],
           ),
         ],
