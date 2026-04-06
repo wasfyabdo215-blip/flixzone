@@ -28,8 +28,9 @@ class _SplashAndHomeState extends State<Splash> {
   Widget build(BuildContext context) {
     if (_showSplash) {
       return Scaffold(
+        backgroundColor: Color(0xff000000),
         //backgroundColor: Color(0xff1F1F29),
-        backgroundColor: Color(0xff1A2232),
+        //backgroundColor: Color(0xff1A2232),
         body: Center(
           child: Text.rich(
             TextSpan(
