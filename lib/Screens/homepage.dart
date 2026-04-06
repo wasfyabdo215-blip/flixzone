@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flixzone/Screens/homescreen.dart';
+import 'package:flutter/material.dart';
+import 'package:flixzone/Screens/homescreen.dart' hide Homescreen;
 import 'package:flixzone/Screens/Categories.dart';
 import 'package:flixzone/Screens/profile.dart';
 

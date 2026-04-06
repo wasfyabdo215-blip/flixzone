@@ -1,6 +1,7 @@
 import 'package:flixzone/Screens/splash.dart';
 import 'package:flutter/material.dart';
 
+
 void main(){
   runApp(const MyApp());
 
