@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/model.dart'; // تأكد أن كلاس Movie موجود هنا
+import '../model/model.dart';
 
 class Userprovide extends ChangeNotifier {
   String? _registeredEmail;

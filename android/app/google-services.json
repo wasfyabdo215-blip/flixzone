@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "397996875947",
+    "project_id": "flixzone-ca1ac",
+    "storage_bucket": "flixzone-ca1ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397996875947:android:7ac55b0d3de0f660a317ee",
+        "android_client_info": {
+          "package_name": "at.flixzone.flixzone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkaITC9qaJSDm4dNSS6fq5ZOzsUOuW7Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

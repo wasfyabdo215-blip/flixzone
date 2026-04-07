@@ -8,9 +8,9 @@ import 'package:provider/provider.dart' as pro;
 
 void main(){
   runApp(
-    // 3. بنلف التطبيق بـ ChangeNotifierProvider من المكتبة (pro)
+
     pro.ChangeNotifierProvider(
-      create: (context) => Userprovide(), // هنا بنادي الكلاس بتاعك أنت
+      create: (context) => Userprovide(),
       child: const MyApp(),
     ),
   );
