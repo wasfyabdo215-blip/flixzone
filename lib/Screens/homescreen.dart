@@ -30,7 +30,7 @@ class Homescreen extends StatelessWidget {
     {"name": "Viland Saga", "img": "assets/vinland.jpg", "rate": 4.8},
   ];
 
-  final List<Map<String, dynamic>> trending = const [
+  final List<Map<String, dynamic>> Toprated = const [
     {"name": "Interstellar", "img": "assets/interstellar.jpg", "rate": 4.9},
     {"name": "Attack on Titan", "img": "assets/attack.jpg", "rate": 4.8},
     {"name": "Se7en", "img": "assets/seven.jpg", "rate": 4.5},
@@ -63,7 +63,7 @@ class Homescreen extends StatelessWidget {
             const SizedBox(height: 25),
             _buildMovieSection("Anime", anime),
             const SizedBox(height: 25),
-            _buildMovieSection("Top Rated", trending),
+            _buildMovieSection("Top Rated", Toprated),
             const SizedBox(height: 40),
           ],
         ),

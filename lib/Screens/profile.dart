@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' as pro;
+import 'package:provider/provider.dart';
 import 'package:flixzone/provider/UserProvide.dart';
-
 import '../model/model.dart';
 
 class Profile extends StatelessWidget {
@@ -13,7 +12,7 @@ class Profile extends StatelessWidget {
     final favoriteList = context.watch<Userprovide>().favoriteMovies;
 
 
-    String userName = "User";
+    String userName = context.watch<Userprovide>().userName;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -21,7 +20,7 @@ class Profile extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            // اللوجو
+            // اللوجو الصغير فوق
             const Icon(Icons.play_circle_fill, color: Colors.redAccent, size: 60),
             const Text.rich(
               TextSpan(
@@ -69,7 +68,6 @@ class Profile extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-
             const Text(
               "My Favorites",
               style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500),
@@ -103,6 +101,7 @@ class Profile extends StatelessWidget {
     );
   }
 
+
   Widget _buildFavoriteCard(BuildContext context, Movie movie) {
     return Stack(
       children: [
@@ -115,6 +114,7 @@ class Profile extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
+
         Positioned(
           top: 8,
           right: 8,

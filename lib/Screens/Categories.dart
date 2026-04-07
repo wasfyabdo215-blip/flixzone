@@ -42,7 +42,7 @@ class Categories extends StatelessWidget {
                   children: [
                     _buildCategoryItem(context, "Movies"),
                     _buildCategoryItem(context, "Anime"),
-                  //  _buildCategoryItem(context, "Animation"),
+                    _buildCategoryItem(context, "Animation"),
                     _buildCategoryItem(context, "Series"),
                   ],
                 ),

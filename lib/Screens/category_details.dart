@@ -14,6 +14,8 @@ class CategoryDetails extends StatelessWidget {
         "assets/vinland.jpg",
         "assets/jujutsukaisen.jpg",
         "assets/hunterxhunter.jpg",
+        "assets/dragon.jpg",
+        "assets/one.jpg",
       ],
       "Movies": [
         "assets/seven.jpg",
@@ -26,15 +28,17 @@ class CategoryDetails extends StatelessWidget {
         "assets/parasite.jpg",
         "assets/spider.jpg",
         "assets/avengers.jpg",
+
+
       ],
-      "Animation": [/*"assets/invincible.jpg"*/],
+      "Animation": ["assets/invincible.jpg"],
       "Series": [
         "assets/peaky.jpg",
         "assets/Walking.jpg",
         "assets/breakingbad.jpg",
         "assets/game.jpg",
         "assets/dark.jpg",
-        // "assets/from.jpg",
+         "assets/from.jpg",
       ],
     };
 
