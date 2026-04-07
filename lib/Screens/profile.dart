@@ -20,7 +20,7 @@ class Profile extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            // اللوجو الصغير فوق
+
             const Icon(Icons.play_circle_fill, color: Colors.redAccent, size: 60),
             const Text.rich(
               TextSpan(

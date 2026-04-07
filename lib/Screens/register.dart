@@ -93,7 +93,7 @@ class _RegisterState extends State<Register> {
                               userController.text.isNotEmpty &&
                               emailController.text.isNotEmpty) {
 
-                            setState(() => _isLoading = true); // تفعيل علامة التحميل
+                            setState(() => _isLoading = true);
 
                             try {
 
@@ -114,14 +114,14 @@ class _RegisterState extends State<Register> {
                                 );
                               }
                             } catch (e) {
-                              // 4. عرض رسالة الخطأ إذا فشل التسجيل (مثلاً الإيميل مستخدم مسبقاً)
+
                               if (mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
                                 );
                               }
                             } finally {
-                              if (mounted) setState(() => _isLoading = false); // إيقاف التحميل
+                              if (mounted) setState(() => _isLoading = false);
                             }
 
                           } else {

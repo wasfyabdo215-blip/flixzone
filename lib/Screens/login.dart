@@ -16,7 +16,7 @@ class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  bool _isLoading = false; // إضافة حالة التحميل
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -91,7 +91,7 @@ class _LoginState extends State<Login> {
                     ),
                     const SizedBox(height: 25),
 
-                    // زر تسجيل الدخول المعدل
+
                     SizedBox(
                       width: double.infinity,
                       child: _isLoading
@@ -107,10 +107,10 @@ class _LoginState extends State<Login> {
                                     passwordController.text.isNotEmpty) {
                                   setState(
                                     () => _isLoading = true,
-                                  ); // ابدأ التحميل
+                                  );
 
                                   try {
-                                    // استدعاء دالة الـ Login من الـ Provider (اللي بتكلم الفايربيز)
+
                                     await context
                                         .read<custom.Userprovide>()
                                         .loginUser(
@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
                                           passwordController.text,
                                         );
 
-                                    // لو نجح، انقل المستخدم للـ Homepage
+
                                     if (mounted) {
                                       Navigator.pushReplacement(
                                         context,
@@ -129,7 +129,7 @@ class _LoginState extends State<Login> {
                                       );
                                     }
                                   } catch (e) {
-                                    // لو حصل خطأ (مثلاً الإيميل غلط أو الباسورد غلط)
+
                                     if (mounted) {
                                       ScaffoldMessenger.of(
                                         context,
@@ -144,7 +144,7 @@ class _LoginState extends State<Login> {
                                     if (mounted)
                                       setState(
                                         () => _isLoading = false,
-                                      ); // وقف التحميل
+                                      );
                                   }
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
