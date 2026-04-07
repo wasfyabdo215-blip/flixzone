@@ -1,6 +1,5 @@
 import 'package:flixzone/Screens/login.dart';
 import 'package:flutter/material.dart';
-// 1. استيراد مكتبة الـ Provider والملف بتاعك
 import 'package:provider/provider.dart';
 import 'package:flixzone/provider/UserProvide.dart' as custom;
 
@@ -19,6 +18,7 @@ class _RegisterState extends State<Register> {
 
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,51 +53,82 @@ class _RegisterState extends State<Register> {
                       ),
                       const SizedBox(height: 25),
 
-                      // Username
                       _buildTextField(userController, "Username", Icons.person),
                       const SizedBox(height: 20),
 
-                      // Email
                       _buildTextField(emailController, "Email", Icons.email),
                       const SizedBox(height: 20),
 
-                      // Password
-                      _buildTextField(passwordController, "Password", Icons.lock,
-                          isPassword: true,
-                          obscure: _obscurePassword,
-                          onToggle: () => setState(() => _obscurePassword = !_obscurePassword)
+                      _buildTextField(
+                        passwordController,
+                        "Password",
+                        Icons.lock,
+                        isPassword: true,
+                        obscure: _obscurePassword,
+                        onToggle: () => setState(
+                              () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
                       const SizedBox(height: 20),
 
-                      // Confirm Password
-                      _buildTextField(confirmController, "Confirm Password", Icons.lock,
-                          isPassword: true,
-                          obscure: _obscureConfirm,
-                          onToggle: () => setState(() => _obscureConfirm = !_obscureConfirm)
+                      _buildTextField(
+                        confirmController,
+                        "Confirm Password",
+                        Icons.lock,
+                        isPassword: true,
+                        obscure: _obscureConfirm,
+                        onToggle: () =>
+                            setState(() => _obscureConfirm = !_obscureConfirm),
                       ),
                       const SizedBox(height: 30),
 
-                      // زر التسجيل
-                      ElevatedButton(
-                        onPressed: () {
-                          // التحقق من أن كلمة المرور متطابقة
-                          if (passwordController.text == confirmController.text && passwordController.text.isNotEmpty) {
 
-                            // 💡 2. حفظ البيانات في الـ Provider قبل الانتقال
-                            context.read<custom.Userprovide>().registerUser(
-                              userController.text,
-                              emailController.text,
-                              passwordController.text,
-                            );
+                      _isLoading
+                          ? const CircularProgressIndicator(color: Colors.red)
+                          : ElevatedButton(
+                        onPressed: () async {
 
-                            // الانتقال لصفحة الـ Login
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>  Login()));
+                          if (passwordController.text == confirmController.text &&
+                              passwordController.text.isNotEmpty &&
+                              userController.text.isNotEmpty &&
+                              emailController.text.isNotEmpty) {
+
+                            setState(() => _isLoading = true); // تفعيل علامة التحميل
+
+                            try {
+
+                              await context.read<custom.Userprovide>().registerUser(
+                                userController.text,
+                                emailController.text,
+                                passwordController.text,
+                              );
+
+
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Account created successfully!")),
+                                );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Login()),
+                                );
+                              }
+                            } catch (e) {
+                              // 4. عرض رسالة الخطأ إذا فشل التسجيل (مثلاً الإيميل مستخدم مسبقاً)
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+                                );
+                              }
+                            } finally {
+                              if (mounted) setState(() => _isLoading = false); // إيقاف التحميل
+                            }
+
                           } else {
-                            // إظهار تنبيه لو الباسورد مش متطابق
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Passwords do not match!")),
+                              const SnackBar(
+                                content: Text("Please make sure all fields are correct!"),
+                              ),
                             );
                           }
                         },
@@ -108,8 +139,15 @@ class _RegisterState extends State<Register> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: const Text("Register", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
-                      )
+                        child: const Text(
+                          "Register",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -121,23 +159,43 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  // دالة مساعدة لتقليل تكرار الكود في الـ TextFields
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {bool isPassword = false, bool obscure = false, VoidCallback? onToggle}) {
+  Widget _buildTextField(
+      TextEditingController controller,
+      String label,
+      IconData icon, {
+        bool isPassword = false,
+        bool obscure = false,
+        VoidCallback? onToggle,
+      }) {
     return TextField(
       controller: controller,
       obscureText: obscure,
+
+      keyboardType: label == "Email" ? TextInputType.emailAddress : TextInputType.text,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white70),
         prefixIcon: Icon(icon, color: Colors.white70),
         suffixIcon: isPassword
-            ? IconButton(icon: Icon(obscure ? Icons.visibility : Icons.visibility_off, color: Colors.white70), onPressed: onToggle)
+            ? IconButton(
+          icon: Icon(
+            obscure ? Icons.visibility : Icons.visibility_off,
+            color: Colors.white70,
+          ),
+          onPressed: onToggle,
+        )
             : null,
         filled: true,
         fillColor: const Color(0xFF2C2C3A).withOpacity(0.8),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: const BorderSide(color: Colors.white24)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: const BorderSide(color: Colors.red, width: 2)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(color: Colors.white24),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(color: Colors.red, width: 2),
+        ),
       ),
     );
   }
